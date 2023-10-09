@@ -1,16 +1,11 @@
 <template>
     <form @submit.prevent="submit">
-        <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+        <h1 class="h3 mb-3 fw-normal text-center">Please sign up</h1>
 
-        <div class="form-floating">
-            <input v-model="data.name" type="text" class="form-control" placeholder="Name">
-        </div>
-        <div class="form-floating">
-            <input v-model="data.password" type="password" class="form-control" placeholder="Password">
-        </div>
+        <input v-model="data.name" type="text" class="form-control" placeholder="Name" required>
+        <input v-model="data.password" type="password" class="form-control" placeholder="Password" required>
 
         <button class="btn btn-primary w-100 py-2" type="submit">Submit</button>
-        <p class="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
     </form>
 </template>
 
