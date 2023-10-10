@@ -12,7 +12,7 @@ export default {
     const store = useStore();
 
     onMounted(async () => {
-      try{
+      try {
         const response = await fetch('http://localhost:7070/api/user', {
           headers: {'Content-Type': 'application/json'},
           credentials: 'include'
@@ -20,11 +20,17 @@ export default {
 
         const content = await response.json();
 
-        message.value = `Welcome, ${content.name}!`;
+        if ( response.status == 200 ) {
 
-        await store.dispatch('setAuth', true);
+          message.value = `Welcome, ${content.name}!`;
+
+          await store.dispatch('setAuth', true);
+          
+        }
       } catch (e) {
+
         await store.dispatch('setAuth', false);
+
       }
     });
 

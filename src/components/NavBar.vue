@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { watch, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 
@@ -32,11 +32,7 @@ export default {
   setup() {
     const store = useStore();
 
-    const auth = ref(store.state.authenticated);
-
-    watch(() => store.state.authenticated, (newValue) => {
-      auth.value = newValue;
-    });
+    const auth = computed(() => store.state.authenticated);
 
     const logout = async () => {
         await fetch('http://localhost:7070/api/logout', {
@@ -44,6 +40,8 @@ export default {
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
         });
+
+        store.dispatch('setAuth', false);
     }
 
     return {
