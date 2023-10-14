@@ -12,15 +12,18 @@
 <script lang="ts">
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
   setup () {
     const data = reactive({
         name: '',
-        password: ''
+        password: '',
+        roleId: '',
     })
 
     const router = useRouter();
+    const store = useStore();
 
     const submit = async () => {
         const response = await fetch('http://localhost:7070/api/login', {
@@ -33,7 +36,19 @@ export default {
         if (!response.ok) {
             console.error('Failed to login.');
         } else {
-            await router.push('/');
+            const fetchh = await fetch('http://localhost:7070/api/user', {
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'
+            });
+            try {
+                const userData = await fetchh.json();
+                await store.dispatch('setAuth', true);
+                await store.dispatch('setUserRole', userData.roleId);
+                console.log(`Value: ${store.getters.getUserRole}`);
+                await router.push('/dashboard');
+            } catch(e) {
+                console.error('whoops');
+            }
         }
     }
 
