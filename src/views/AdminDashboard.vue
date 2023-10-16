@@ -1,45 +1,57 @@
 <template>
-    {{ message }}
+  <div v-if="!clicked">
+      <button @click="showUserList">Zarządzanie użytkownikami</button>
+      <a href="/dashboard">
+          <button>Powrót do panelu użytkownika</button>
+      </a>
+  </div>
+  <div v-else>
+      <UserList/>
+  </div>
 </template>
-  
+
 <script lang="ts">
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import UserList from '../components/UserList.vue'
 
 export default {
-setup() {
-    let message = ref('You are not logged in.');
-    const store = useStore();
 
-    onMounted(async () => {
+components: {
+  UserList,
+},
+
+setup() {
+  const store = useStore();
+  const clicked = ref(false);
+
+  onMounted(async () => {
       try {
-        const response = await fetch('http://localhost:7070/api/user', {
+          const response = await fetch('http://localhost:7070/api/user', {
           headers: {'Content-Type': 'application/json'},
           credentials: 'include'
-        });
+          });
 
-        const content = await response.json();
-        message.value = 'ah';
-        if ( response.status == 200 && content.roleId === 1 ) {
+          if ( response.status == 200 ) {
 
           await store.dispatch('setAuth', true);
-          message.value = 'Verified!'
           
-        } else {
-          await store.dispatch('setAuth', true);
-          message.value = "huh?";
-        }
+          }
       } catch (e) {
 
-        await store.dispatch('setAuth', false);
-        message.value = 'bruh';
+          await store.dispatch('setAuth', false);
 
       }
-    });
+  });
 
-    return {
-        message
-    }
+  function showUserList() {
+      clicked.value = !clicked.value;
+  }
+
+  return {
+      clicked,
+      showUserList,
+  }
 }
 }
 </script>

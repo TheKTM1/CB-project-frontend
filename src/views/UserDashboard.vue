@@ -1,6 +1,9 @@
 <template>
     <div v-if="!clicked">
         <button @click="showSettings">Ustawienia konta</button>
+        <a v-if="userRole == 1" href="/admin/dashboard">
+            <button>Panel administratora</button>
+        </a>
         <!-- {{ message }} -->
     </div>
     <div v-else>
@@ -25,6 +28,7 @@ setup() {
     const clicked = ref(false);
     const isLoggedIn = ref(false);
     const userName = ref('');
+    const userRole = ref(0);
 
     onMounted(async () => {
         try {
@@ -41,6 +45,7 @@ setup() {
 
             isLoggedIn.value = true;
             userName.value = content.name;
+            userRole.value = content.roleId;
 
             await store.dispatch('setAuth', true);
             
@@ -61,6 +66,7 @@ setup() {
         clicked,
         isLoggedIn,
         userName,
+        userRole,
         showSettings,
     }
 }

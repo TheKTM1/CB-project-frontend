@@ -19,7 +19,6 @@ export default {
 
 <style lang="scss">
   .form-signin {
-    max-width: 330px;
     padding: 1rem;
   }
 
