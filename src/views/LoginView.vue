@@ -35,6 +35,9 @@ export default {
 
         if (!response.ok) {
             console.error('Failed to login.');
+
+            if(response.status == 403)
+                alert("To konto zostało zablokowane.");
         } else {
             const fetchh = await fetch('http://localhost:7070/api/user', {
             headers: {'Content-Type': 'application/json'},
@@ -54,7 +57,7 @@ export default {
 
     return {
         data,
-        submit
+        submit,
     }
   }
 }

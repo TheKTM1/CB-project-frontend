@@ -27,12 +27,17 @@
                     <td><button @click="deleteOn(key)"> Skasuj </button></td>
                 </tr>
             </table>
+
+            <button @click="addUser"> Dodaj użytkownika </button>
         </div>
         <div v-if="displayedDiv == 1">
             <UserEdit :currentUser="currentUser"/>
         </div>
         <div v-if="displayedDiv == 2">
             <UserDelete :currentUser="currentUser"/>
+        </div>
+        <div v-if="displayedDiv == 3">
+            <UserAdd/>
         </div>
 
     </main>
@@ -42,6 +47,7 @@
 import { ref, onMounted } from 'vue';
 import UserEdit from '@/components/UserEdit.vue';
 import UserDelete from '@/components/UserDelete.vue';
+import UserAdd from '@/components/UserAdd.vue';
 
 interface User {
     id: number,
@@ -58,6 +64,7 @@ export default {
     components: {
         UserEdit,
         UserDelete,
+        UserAdd,
     },
 
     setup(){
@@ -94,12 +101,17 @@ export default {
             displayedDiv.value = 2;
         }
 
+        function addUser(){
+            displayedDiv.value = 3;
+        }
+
         return {
             userData,
             displayedDiv,
             currentUser,
             editOn,
             deleteOn,
+            addUser,
         }
     }
 }

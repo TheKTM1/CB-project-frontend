@@ -52,7 +52,8 @@ export default {
             if (!response.ok) {
                 console.error('Nie udało się zmienić hasła.')
             } else {
-                await router.push('/login')
+                alert("Hasło zmienione!");
+                await router.push('/dashboard')
             }
         }
 
