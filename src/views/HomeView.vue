@@ -22,7 +22,7 @@ export default {
 
         if ( response.status == 200 ) {
 
-          message.value = `Welcome, ${content.name}!`;
+          message.value = `Welcome, ${content.name}! Your role is: ${content.roleId}.`;
 
           await store.dispatch('setAuth', true);
           
