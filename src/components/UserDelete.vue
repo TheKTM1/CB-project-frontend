@@ -34,6 +34,7 @@ export default {
                 console.error('Nie udało się usunąć konta użytkownika.')
             } else {
                 alert("Użytkownik usunięty.");
+                window.location.reload();
             }
         }
 

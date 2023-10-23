@@ -11,7 +11,7 @@
         <input type="number" v-model="user.roleId"/>
 
         <label>Czas wygaśnięcia hasła</label>
-        <input type="datetime"/>
+        <input type="datetime-local" v-model="user.passwordExpiration"/>
 
         <label>Ograniczenia hasła</label>
         <input type="checkbox" v-model="user.passwordRestrictionsEnabled"/>
@@ -47,6 +47,7 @@ export default {
                 console.error('Nie udało się zaktualizować konta użytkownika.')
             } else {
                 alert("Zaktualizowano!");
+                window.location.reload();
             }
         }
 
