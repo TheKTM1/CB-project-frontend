@@ -1,10 +1,10 @@
 <template>
     <div v-if="!clicked">
+        <div>{{ message }}</div>
         <button @click="showSettings">Ustawienia konta</button>
         <a v-if="userRole == 1" href="/admin/dashboard">
             <button>Panel administratora</button>
         </a>
-        <!-- {{ message }} -->
     </div>
     <div v-else>
         <AccountSettings :isLoggedIn="isLoggedIn" :userName="userName"/>
@@ -41,11 +41,15 @@ setup() {
 
             if ( response.status == 200 ) {
 
-            message.value = `Welcome, ${content.name}! Your role is: ${content.roleId}.`;
-
             isLoggedIn.value = true;
             userName.value = content.name;
             userRole.value = content.roleId;
+
+            if(content.mustChangePassword == true){
+                message.value = `Witaj, ${content.name}. W celu dalszego korzystania z tej strony musisz zmienić hasło.`;
+            } else {
+                message.value = `Witaj, ${content.name}!`;
+            }
 
             await store.dispatch('setAuth', true);
             

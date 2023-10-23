@@ -9,7 +9,7 @@
                     <td> ID </td>
                     <td> Nazwa </td>
                     <td> Rola </td>
-                    <td> Wygasanie hasła </td>
+                    <td> Data wygaśnięcia hasła </td>
                     <td> Musi zmienić hasło </td>
                     <td> Włączone ograniczenia hasła </td>
                     <td> Zablokowany </td>
@@ -19,7 +19,7 @@
                     <td> {{ user.id }} </td>
                     <td> {{ user.name }} </td>
                     <td> {{ user.roleId }} </td>
-                    <td> {{ user.passwordExpiration }} </td>
+                    <td> {{ user.passwordExpiration.toLocaleDateString() }} </td>
                     <td> {{ user.mustChangePassword }} </td>
                     <td> {{ user.passwordRestrictionsEnabled }} </td>
                     <td> {{ user.isBlocked }} </td>
@@ -53,7 +53,7 @@ interface User {
     id: number,
     name: string,
     roleId: number,
-    passwordExpiration: number,
+    passwordExpiration: Date,
     mustChangePassword: boolean,
     passwordRestrictionsEnabled: boolean,
     isBlocked: boolean,
@@ -77,14 +77,16 @@ export default {
             try {
                 const response = await fetch('http://localhost:7070/api/users', {
                 headers: {'Content-Type': 'application/json'},
-                // credentials: 'include'
                 });
 
                 const content = await response.json();
 
                 if ( response.status == 200 ) {
 
-                    userData.value = content;
+                    userData.value = content.map((user: User) => ({
+                        ...user,
+                        passwordExpiration: new Date(user.passwordExpiration)
+                    }));
                 }
             } catch (e) {
                 console.error(e);

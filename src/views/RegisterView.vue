@@ -23,16 +23,22 @@ export default {
     const router = useRouter()
 
     const submit = async () => {
-      const response = await fetch('http://localhost:7070/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
+      const improperPassword = /(.).*\1/.test(data.password);
 
-      if (!response.ok) {
-        console.error('Failed to register.')
+      if(!improperPassword){
+        const response = await fetch('http://localhost:7070/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          console.error('Failed to register.')
+        } else {
+          await router.push('/login')
+        }
       } else {
-        await router.push('/login')
+        alert("Hasło nie może mieć powtarzających się znaków.");
       }
     }
 

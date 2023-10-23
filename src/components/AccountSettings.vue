@@ -43,17 +43,23 @@ export default {
         }
 
         const submit = async () => {
-            const response = await fetch('http://localhost:7070/api/change-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
+            const improperPassword = /(.).*\1/.test(data.newPassword);
 
-            if (!response.ok) {
-                console.error('Nie udało się zmienić hasła.')
+            if(!improperPassword){
+                const response = await fetch('http://localhost:7070/api/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+
+                if (!response.ok) {
+                    console.error('Nie udało się zmienić hasła.')
+                } else {
+                    alert("Hasło zmienione!");
+                    window.location.reload();
+                }
             } else {
-                alert("Hasło zmienione!");
-                await router.push('/dashboard')
+                alert("Hasło nie może mieć powtarzających się znaków.");
             }
         }
 
