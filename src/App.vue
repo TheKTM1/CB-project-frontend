@@ -37,4 +37,13 @@ export default {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
+  
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    background-size: cover;
+    background-color: #ace;
+  }
 </style>

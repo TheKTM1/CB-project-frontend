@@ -1,5 +1,11 @@
 <template>
-  {{ message }}
+  <div class="d-flex justify-content-center mt-5">
+    <div class="rounded border p-4 bg-light">
+      <h3 class="h3 fw-normal text-center">
+      {{ message }}
+      </h3>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
