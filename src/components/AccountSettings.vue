@@ -26,6 +26,7 @@ export default {
     props: {
         isLoggedIn: Boolean,
         userName: String,
+        userRestrictions: Boolean,
     },
     setup(props: any){
 
@@ -36,6 +37,7 @@ export default {
             userName: props.userName,
             newPassword: '',
             oldPassword: '',
+            userRestrictions: props.userRestrictions,
         });
 
         function showPasswordChange(){
@@ -45,7 +47,7 @@ export default {
         const submit = async () => {
             const improperPassword = /(.).*\1/.test(data.newPassword);
 
-            if(!improperPassword){
+            if(!improperPassword || (improperPassword && (data.userRestrictions == 0))){
                 const response = await fetch('http://localhost:7070/api/change-password', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -59,7 +61,7 @@ export default {
                     window.location.reload();
                 }
             } else {
-                alert("Hasło nie może mieć powtarzających się znaków.");
+                alert("Hasło dla tego konta nie może mieć powtarzających się znaków.");
             }
         }
 

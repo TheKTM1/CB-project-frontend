@@ -7,7 +7,7 @@
         </a>
     </div>
     <div v-else>
-        <AccountSettings :isLoggedIn="isLoggedIn" :userName="userName"/>
+        <AccountSettings :isLoggedIn="isLoggedIn" :userName="userName" :userRestrictions="userRestrictions"/>
     </div>
 </template>
   
@@ -29,6 +29,7 @@ setup() {
     const isLoggedIn = ref(false);
     const userName = ref('');
     const userRole = ref(0);
+    const userRestrictions = ref(false);
 
     onMounted(async () => {
         try {
@@ -44,6 +45,7 @@ setup() {
             isLoggedIn.value = true;
             userName.value = content.name;
             userRole.value = content.roleId;
+            userRestrictions.value = content.passwordRestrictionsEnabled;
 
             if(content.mustChangePassword == true){
                 message.value = `Witaj, ${content.name}. W celu dalszego korzystania z tej strony musisz zmienić hasło.`;
@@ -71,6 +73,7 @@ setup() {
         isLoggedIn,
         userName,
         userRole,
+        userRestrictions,
         showSettings,
     }
 }
