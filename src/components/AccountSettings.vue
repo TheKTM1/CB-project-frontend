@@ -1,16 +1,18 @@
 <template>
     <main>
 
-        <h1>Ustawienia</h1>
+        <h1 v-if="!clicked" class="mb-3 fw-normal text-center">Ustawienia</h1>
         <div v-if="!isLoggedIn">Zaloguj się, aby mieć dostęp do zawartości.</div>
         <div v-else>
-            <button v-if="!clicked" @click="showPasswordChange">Zmień hasło</button>
+            <button class="btn btn-primary w-100 py-2" v-if="!clicked" @click="showPasswordChange">Zmień hasło</button>
             <div v-else>
-                <form @submit.prevent="submit">
-                    <h3>Zmiana hasła</h3>
-                    <label>Nowe hasło:</label><input v-model="data.newPassword" type="password"/>
-                    <label>Stare hasło dla potwierdzenia:</label><input v-model="data.oldPassword" type="password"/>
-                    <button type="submit">Zatwierdź</button>
+                <form class="d-flex flex-column" @submit.prevent="submit">
+                    <h1 class="mb-5 fw-normal text-center">Zmiana hasła</h1>
+                    <label class="fw-bold">Stare hasło:</label>
+                    <input style="width: 400px;" v-model="data.oldPassword" type="password"/>
+                    <label class="fw-bold">Nowe hasło:</label>
+                    <input style="width: 400px;" v-model="data.newPassword" type="password"/>
+                    <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Zatwierdź</button>
                 </form>
             </div>
         </div>

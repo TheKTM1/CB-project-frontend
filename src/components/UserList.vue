@@ -2,33 +2,37 @@
     <main>
 
         <div v-if="displayedDiv == 0">
-            <h3>Zarządzanie użytkownikami</h3>
+            <h3 class="h3 mb-3 text-center mb-4">Zarządzanie użytkownikami</h3>
 
-            <table style="width:100%">
-                <tr style="border-bottom: 1px solid black;">
-                    <td> ID </td>
-                    <td> Nazwa </td>
-                    <td> Rola </td>
-                    <td> Data wygaśnięcia hasła </td>
-                    <td> Musi zmienić hasło </td>
-                    <td> Włączone ograniczenia hasła </td>
-                    <td> Zablokowany </td>
-                    <td colspan="2"> Akcje </td>
-                </tr>
-                <tr v-for="(user, key) in userData" :key="key" style="border-bottom: 1px solid black;">
-                    <td> {{ user.id }} </td>
-                    <td> {{ user.name }} </td>
-                    <td> {{ user.roleId }} </td>
-                    <td> {{ user.passwordExpiration.toLocaleDateString() }} </td>
-                    <td> {{ user.mustChangePassword }} </td>
-                    <td> {{ user.passwordRestrictionsEnabled }} </td>
-                    <td> {{ user.isBlocked }} </td>
-                    <td><button @click="editOn(key)"> Edytuj </button></td>
-                    <td><button @click="deleteOn(key)"> Skasuj </button></td>
-                </tr>
+            <table class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col"> ID </th>
+                        <th scope="col"> Nazwa </th>
+                        <th scope="col"> Rola </th>
+                        <th scope="col"> Data wygaśnięcia hasła </th>
+                        <th scope="col"> Musi zmienić hasło </th>
+                        <th scope="col"> Włączone ograniczenia hasła </th>
+                        <th scope="col"> Zablokowany </th>
+                        <th scope="col" colspan="2"> Akcje </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(user, key) in userData" :key="key">
+                        <th scope="row"> {{ user.id }} </th>
+                        <td> {{ user.name }} </td>
+                        <td> {{ user.roleId }} </td>
+                        <td> {{ user.passwordExpiration.toLocaleDateString() }} </td>
+                        <td> {{ user.mustChangePassword }} </td>
+                        <td> {{ user.passwordRestrictionsEnabled }} </td>
+                        <td> {{ user.isBlocked }} </td>
+                        <td><button class="btn btn-primary w-100 p-1 m-0" @click="editOn(key)"> Edytuj </button></td>
+                        <td><button class="btn btn-danger w-100 p-1 m-0" @click="deleteOn(key)"> Skasuj </button></td>
+                    </tr>
+                </tbody>
             </table>
 
-            <button @click="addUser"> Dodaj użytkownika </button>
+            <button class="btn btn-primary w-100 py-2" @click="addUser"> Dodaj użytkownika </button>
         </div>
         <div v-if="displayedDiv == 1">
             <UserEdit :currentUser="currentUser"/>

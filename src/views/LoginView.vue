@@ -1,11 +1,11 @@
 <template>
     <div class="d-flex justify-content-center mt-5">
-        <div class="col-4">
+        <div class="rounded border p-4 bg-light">
             <form @submit.prevent="submit">
                 <h3 class="h3 mb-3 fw-normal text-center">Please sign in</h3>
 
                 <input v-model="data.name" type="text" class="form-control" placeholder="Name" required>
-                <input v-model="data.password" type="password" class="form-control" placeholder="Password" required>
+                <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Password" required>
 
                 <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
             </form>

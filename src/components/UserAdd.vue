@@ -1,31 +1,37 @@
 <template>
 
-    <h3>Dodawanie użytkownika</h3>
+    <h3 class="h3 mb-3 text-center mb-4">Dodawanie użytkownika</h3>
 
-    <form @submit.prevent="submit">
+    <form class="d-flex flex-column" @submit.prevent="submit">
 
-        <label>Nazwa</label>
-        <input type="text" v-model="user.name"/>
+        <label class="fw-bold mt-2">Nazwa</label>
+        <input style="width: 400px;" type="text" v-model="user.name"/>
 
-        <label>Hasło</label>
-        <input type="text" v-model="user.password"/>
+        <label class="fw-bold mt-2">Hasło</label>
+        <input style="width: 400px;" type="text" v-model="user.password"/>
 
-        <label>Rola</label>
-        <input type="number" v-model="user.roleId"/>
+        <label class="fw-bold mt-2">Rola</label>
+        <input style="width: 400px;" type="number" v-model="user.roleId"/>
 
-        <label>Czas wygaśnięcia hasła</label>
-        <input type="datetime-local" v-model="user.passwordExpiration"/>
+        <label class="fw-bold mt-2">Czas wygaśnięcia hasła</label>
+        <input style="width: 400px;" type="datetime-local" v-model="user.passwordExpiration"/>
 
-        <label>Powinien zmienić hasło</label>
-        <input type="checkbox" v-model="user.passwordRestrictionsEnabled"/>
+        <div class="mt-2">
+            <label class="fw-bold me-2">Powinien zmienić hasło</label>
+            <input type="checkbox" v-model="user.passwordRestrictionsEnabled"/>
+        </div>
 
-        <label>Ograniczenia hasła</label>
-        <input type="checkbox" v-model="user.passwordRestrictionsEnabled"/>
+        <div class="mt-2">
+            <label class="fw-bold me-2">Ograniczenia hasła</label>
+            <input type="checkbox" v-model="user.passwordRestrictionsEnabled"/>
+        </div>
 
-        <label>Zablokowany</label>
-        <input type="checkbox" v-model="user.isBlocked"/>
+        <div class="mt-2">
+            <label class="fw-bold me-2">Zablokowany</label>
+            <input type="checkbox" v-model="user.isBlocked"/>
+        </div>
 
-        <button type="submit">Dodaj użytkownika</button>
+        <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Dodaj użytkownika</button>
 
     </form>
 

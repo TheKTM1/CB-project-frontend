@@ -1,13 +1,17 @@
 <template>
-    <div v-if="!clicked">
-        <div>{{ message }}</div>
-        <button @click="showSettings">Ustawienia konta</button>
-        <a v-if="userRole == 1" href="/admin/dashboard">
-            <button>Panel administratora</button>
-        </a>
-    </div>
-    <div v-else>
-        <AccountSettings :isLoggedIn="isLoggedIn" :userName="userName" :userRestrictions="userRestrictions"/>
+    <div class="d-flex justify-content-center mt-5">
+        <div class="rounded border p-4 bg-light">
+            <div v-if="!clicked">
+                <h4 class="h4 mb-3 fw-normal text-center mb-4">{{ message }}</h4>
+                <button @click="showSettings" class="btn btn-primary w-100 py-2">Ustawienia konta</button>
+                <a v-if="userRole == 1" href="/admin/dashboard">
+                    <button class="btn btn-primary w-100 mt-2 py-2">Panel administratora</button>
+                </a>
+            </div>
+            <div v-else>
+                <AccountSettings :isLoggedIn="isLoggedIn" :userName="userName" :userRestrictions="userRestrictions"/>
+            </div>
+        </div>
     </div>
 </template>
   

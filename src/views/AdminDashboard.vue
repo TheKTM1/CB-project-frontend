@@ -1,13 +1,18 @@
 <template>
-  <div v-if="!clicked">
-      <button @click="showUserList">Zarządzanie użytkownikami</button>
-      <a href="/dashboard">
-          <button>Powrót do panelu użytkownika</button>
-      </a>
-  </div>
-  <div v-else>
-      <UserList/>
-  </div>
+     <div class="d-flex justify-content-center mt-5">
+        <div class="rounded border p-4 bg-light">
+            <div v-if="!clicked">
+                <h4 class="h4 mb-3 text-center mb-4">Panel administratora</h4>
+                <button class="btn btn-primary w-100 py-2" @click="showUserList">Zarządzanie użytkownikami</button>
+                <a href="/dashboard">
+                    <button class="btn btn-primary w-100 py-2 mt-2">Powrót do panelu użytkownika</button>
+                </a>
+            </div>
+            <div v-else>
+                <UserList/>
+            </div>
+        </div>
+     </div>
 </template>
 
 <script lang="ts">
