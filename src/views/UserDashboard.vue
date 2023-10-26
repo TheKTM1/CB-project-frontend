@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center mt-5">
         <div class="rounded border p-4 bg-light">
             <div v-if="!clicked">
-                <h4 class="h4 mb-3 fw-normal text-center">{{ message }}</h4>
+                <h4 class="h4 mb-3 fw-normal text-center mb-4">{{ message }}</h4>
                 <button @click="showSettings" class="btn btn-primary w-100 py-2">Ustawienia konta</button>
                 <a v-if="userRole == 1" href="/admin/dashboard">
                     <button class="btn btn-primary w-100 mt-2 py-2">Panel administratora</button>

@@ -5,8 +5,8 @@
     <div>
 
         <p>Czy chcesz usunąć użytkownika {{ user.name }}?</p>
-        <button @click="dropUser">Tak</button>
-        <button>Nie</button>
+        <button class="btn btn-danger w-100 py-2" @click="dropUser">Tak</button>
+        <button class="btn btn-secondary w-100 py-2 mt-2">Nie</button>
 
     </div>
 
