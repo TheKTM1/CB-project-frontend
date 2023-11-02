@@ -8,7 +8,7 @@
         <input style="width: 400px;" type="text" v-model="user.name"/>
 
         <label class="fw-bold mt-2">Hasło</label>
-        <input style="width: 400px;" type="text" v-model="user.password"/>
+        <input style="width: 400px;" type="password" v-model="user.password"/>
 
         <label class="fw-bold mt-2">Rola</label>
         <input style="width: 400px;" type="number" v-model="user.roleId"/>
