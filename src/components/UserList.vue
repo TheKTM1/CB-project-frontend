@@ -14,7 +14,7 @@
                         <th scope="col"> Musi zmienić hasło </th>
                         <th scope="col"> Włączone ograniczenia hasła </th>
                         <th scope="col"> Zablokowany </th>
-                        <th scope="col" colspan="2"> Akcje </th>
+                        <th scope="col" colspan="3"> Akcje </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,6 +27,7 @@
                         <td> {{ user.passwordRestrictionsEnabled }} </td>
                         <td> {{ user.isBlocked }} </td>
                         <td><button class="btn btn-primary w-100 p-1 m-0" @click="editOn(key)"> Edytuj </button></td>
+                        <td><button class="btn btn-warning w-100 p-1 m-0" @click="logOn(key)"> Logi </button></td>
                         <td><button class="btn btn-danger w-100 p-1 m-0" @click="deleteOn(key)"> Skasuj </button></td>
                     </tr>
                 </tbody>
@@ -38,9 +39,12 @@
             <UserEdit :currentUser="currentUser"/>
         </div>
         <div v-if="displayedDiv == 2">
-            <UserDelete :currentUser="currentUser"/>
+            <UserLogs :currentUser="currentUser"/>
         </div>
         <div v-if="displayedDiv == 3">
+            <UserDelete :currentUser="currentUser"/>
+        </div>
+        <div v-if="displayedDiv == 4">
             <UserAdd/>
         </div>
 
@@ -50,6 +54,7 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue';
 import UserEdit from '@/components/UserEdit.vue';
+import UserLogs from '@/components/UserLogs.vue';
 import UserDelete from '@/components/UserDelete.vue';
 import UserAdd from '@/components/UserAdd.vue';
 
@@ -67,6 +72,7 @@ export default {
 
     components: {
         UserEdit,
+        UserLogs,
         UserDelete,
         UserAdd,
     },
@@ -102,13 +108,18 @@ export default {
             displayedDiv.value = 1;
         }
 
-        function deleteOn(key: number){
+        function logOn(key: number){
             currentUser.value = userData.value[key];
             displayedDiv.value = 2;
         }
 
-        function addUser(){
+        function deleteOn(key: number){
+            currentUser.value = userData.value[key];
             displayedDiv.value = 3;
+        }
+
+        function addUser(){
+            displayedDiv.value = 4;
         }
 
         return {
@@ -116,6 +127,7 @@ export default {
             displayedDiv,
             currentUser,
             editOn,
+            logOn,
             deleteOn,
             addUser,
         }
