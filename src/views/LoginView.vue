@@ -4,7 +4,9 @@
             <form @submit.prevent="submit">
                 <h3 class="h3 mb-3 fw-normal text-center">Zaloguj się</h3>
 
-                <input v-model="data.name" type="text" class="form-control" placeholder="Nazwa" required>
+                <input v-model="username.name" type="text" class="form-control" placeholder="Nazwa" required>
+                <button class="btn btn-primary w-100 py-2" @click="verify">Weryfikuj</button>
+                
                 <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
 
                 <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
@@ -20,14 +22,33 @@ import { useStore } from 'vuex';
 
 export default {
   setup () {
-    const data = reactive({
+    const username = reactive({
         name: '',
+    })
+
+    const data = reactive({
+        name: username.name,
         password: '',
         roleId: '',
     })
 
     const router = useRouter();
     const store = useStore();
+
+    const verify = async () => {
+        const response = await fetch('http://localhost:7070/api/verify', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify(username)
+        })
+
+        if (!response.ok) {
+            console.log("error tba");
+        }
+
+        console.log(response.json());
+    }
 
     const submit = async () => {
         const response = await fetch('http://localhost:7070/api/login', {
@@ -65,7 +86,9 @@ export default {
 
     return {
         data,
+        username,
         submit,
+        verify,
     }
   }
 }
