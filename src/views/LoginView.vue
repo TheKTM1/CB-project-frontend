@@ -8,6 +8,7 @@
                 <button class="btn btn-primary w-100 py-2" @click="verify">Weryfikuj</button>
                 
                 <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
+                <input v-model="data.oneTimePassword" type="text" class="form-control mt-1 rounded" placeholder="XD" required>
 
                 <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
             </form>
@@ -27,9 +28,10 @@ export default {
     })
 
     const data = reactive({
-        name: username.name,
+        name: '',
         password: '',
         roleId: '',
+        oneTimePassword: '',
     })
 
     const router = useRouter();
@@ -47,10 +49,13 @@ export default {
             console.log("error tba");
         }
 
-        console.log(response.json());
+        alert(await response.json());  
     }
 
     const submit = async () => {
+        data.name = username.name;
+        console.log(`username: ${username.name}, data: ${data.name}`);
+        
         const response = await fetch('http://localhost:7070/api/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
