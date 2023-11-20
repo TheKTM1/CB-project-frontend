@@ -50,7 +50,8 @@ export default {
             passwordExpiration: new Date('2023-12-31'),
             mustChangePassword: true,
             passwordRestrictionsEnabled: true,
-            isBlocked: false
+            isBlocked: false,
+            badLoginBlockExpirationTime: null,
         });
 
         const submit = async () => {
