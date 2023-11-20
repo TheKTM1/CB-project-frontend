@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -26,40 +26,46 @@ export default {
         roleId: '',
     })
 
+    let badLoginCount = ref(0);
     const router = useRouter();
     const store = useStore();
 
     const submit = async () => {
-        const response = await fetch('http://localhost:7070/api/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify(data)
-        })
+        if(badLoginCount.value < 3){
+            const response = await fetch('http://localhost:7070/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify(data)
+            })
 
-        if (!response.ok) {
-            console.error('Failed to login.');
+            if (!response.ok) {
+                console.error('Failed to login.');
 
-            if(response.status == 403) {
-                alert("To konto zostało zablokowane.");
+                if(response.status == 403) {
+                    alert("To konto zostało zablokowane.");
+                } else {
+                    badLoginCount.value += 1;
+                    alert("Login lub hasło jest niepoprawne.");
+                }
+
             } else {
-                alert("Login lub hasło jest niepoprawne.");
+                const fetchh = await fetch('http://localhost:7070/api/user', {
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include'
+                });
+                try {
+                    const userData = await fetchh.json();
+                    await store.dispatch('setAuth', true);
+                    await store.dispatch('setUserRole', userData.roleId);
+                    console.log(`Value: ${store.getters.getUserRole}`);
+                    await router.push('/dashboard');
+                } catch(e) {
+                    console.error('whoops');
+                }
             }
-
         } else {
-            const fetchh = await fetch('http://localhost:7070/api/user', {
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include'
-            });
-            try {
-                const userData = await fetchh.json();
-                await store.dispatch('setAuth', true);
-                await store.dispatch('setUserRole', userData.roleId);
-                console.log(`Value: ${store.getters.getUserRole}`);
-                await router.push('/dashboard');
-            } catch(e) {
-                console.error('whoops');
-            }
+            alert("Przekroczono dozwoloną próbę logowań.");
         }
     }
 
