@@ -66,6 +66,7 @@ interface User {
     mustChangePassword: boolean,
     passwordRestrictionsEnabled: boolean,
     isBlocked: boolean,
+    sessionTimeMinutes: number,
 }
 
 export default {
