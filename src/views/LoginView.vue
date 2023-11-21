@@ -1,14 +1,25 @@
 <template>
     <div class="d-flex justify-content-center mt-5">
         <div class="rounded border p-4 bg-light">
-            <form @submit.prevent="submit">
-                <h3 class="h3 mb-3 fw-normal text-center">Zaloguj się</h3>
+            <div v-if="!verified">
+                <form @submit.prevent="verify">
+                    <h3 class="h3 mb-3 fw-normal text-center">Zaloguj się</h3>
 
-                <input v-model="data.name" type="text" class="form-control" placeholder="Nazwa" required>
-                <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
+                    <input v-model="username.name" type="text" class="form-control" placeholder="Nazwa" required>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Weryfikuj</button>
+                </form>
+             </div>
+            
+            <div v-else>
+                <form @submit.prevent="submit">
+                    <p>{{ username.name }}</p>
+                    <p>X = {{ oneTimePasswordX }}</p>
+                    <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
+                    <input v-model="data.oneTimePassword" type="text" class="form-control mt-1 rounded" placeholder="Hasło jednorazowe" required>
 
-                <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
-            </form>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
+                </form>
+            </div>
         </div>
     </div>
 </template>
@@ -20,10 +31,18 @@ import { useStore } from 'vuex';
 
 export default {
   setup () {
+    const verified = ref(false);
+    const oneTimePasswordX = ref("");
+
+    const username = reactive({
+        name: '',
+    })
+
     const data = reactive({
         name: '',
         password: '',
         roleId: '',
+        oneTimePassword: '',
         badLoginBlockExpirationTime: '',
     })
 
@@ -31,7 +50,32 @@ export default {
     const router = useRouter();
     const store = useStore();
 
+    const verify = async () => {
+        const response = await fetch('http://localhost:7070/api/verify', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify(username)
+        })
+
+        if (!response.ok) {
+            console.log("Error");
+        } else {
+            verified.value = !verified.value;
+            oneTimePasswordX.value = await response.json();
+        }
+    }
+
     const submit = async () => {
+        data.name = username.name;
+        console.log(`username: ${username.name}, data: ${data.name}`);
+        
+        const response = await fetch('http://localhost:7070/api/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify(data)
+        })
         if(badLoginCount.value < 3){
             const response = await fetch('http://localhost:7070/api/login', {
                 method: 'POST',
@@ -81,8 +125,12 @@ export default {
     }
 
     return {
+        verified,
+        oneTimePasswordX,
         data,
+        username,
         submit,
+        verify,
     }
   }
 }
