@@ -34,6 +34,7 @@ setup() {
     const userName = ref('');
     const userRole = ref(0);
     const userRestrictions = ref(false);
+    let sessionTimeMinutes = new Date();
 
     onMounted(async () => {
         try {
@@ -50,6 +51,7 @@ setup() {
             userName.value = content.name;
             userRole.value = content.roleId;
             userRestrictions.value = content.passwordRestrictionsEnabled;
+            sessionTimeMinutes = content.sessionTimeMinutes;
 
             if(content.mustChangePassword == true){
                 message.value = `Witaj, ${content.name}. W celu dalszego korzystania z tej strony musisz zmienić hasło.`;
@@ -58,6 +60,8 @@ setup() {
             }
 
             await store.dispatch('setAuth', true);
+
+            setTimeout(logout, (content.sessionTimeMinutes * 60000));
             
             }
         } catch (e) {
@@ -65,10 +69,21 @@ setup() {
             await store.dispatch('setAuth', false);
 
         }
+
     });
 
     function showSettings() {
         clicked.value = !clicked.value;
+    };
+
+    const logout = async () => {
+    await fetch('http://localhost:7070/api/logout', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include'
+    });
+
+    store.dispatch('setAuth', false);
     }
 
     return {

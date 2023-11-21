@@ -24,6 +24,7 @@ export default {
         name: '',
         password: '',
         roleId: '',
+        badLoginBlockExpirationTime: '',
     })
 
     let badLoginCount = ref(0);
@@ -58,13 +59,23 @@ export default {
                     const userData = await fetchh.json();
                     await store.dispatch('setAuth', true);
                     await store.dispatch('setUserRole', userData.roleId);
-                    console.log(`Value: ${store.getters.getUserRole}`);
                     await router.push('/dashboard');
                 } catch(e) {
                     console.error('whoops');
                 }
             }
         } else {
+            const badLoginResponse = await fetch('http://localhost:7070/api/block-account', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify(data)
+            })
+
+            if(!badLoginResponse.ok){
+                console.error("Błąd z blokowaniem.");
+            }
+
             alert("Przekroczono dozwoloną próbę logowań.");
         }
     }
