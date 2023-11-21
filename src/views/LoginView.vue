@@ -1,28 +1,39 @@
 <template>
     <div class="d-flex justify-content-center mt-5">
         <div class="rounded border p-4 bg-light">
-            <form @submit.prevent="submit">
-                <h3 class="h3 mb-3 fw-normal text-center">Zaloguj się</h3>
+            <div v-if="!verified">
+                <form @submit.prevent="verify">
+                    <h3 class="h3 mb-3 fw-normal text-center">Zaloguj się</h3>
 
-                <input v-model="username.name" type="text" class="form-control" placeholder="Nazwa" required>
-                <button class="btn btn-primary w-100 py-2" @click="verify">Weryfikuj</button>
-                
-                <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
-                <input v-model="data.oneTimePassword" type="text" class="form-control mt-1 rounded" placeholder="XD" required>
+                    <input v-model="username.name" type="text" class="form-control" placeholder="Nazwa" required>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Weryfikuj</button>
+                </form>
+             </div>
+            
+            <div v-else>
+                <form @submit.prevent="submit">
+                    <p>{{ username.name }}</p>
+                    <p>X = {{ oneTimePasswordX }}</p>
+                    <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
+                    <input v-model="data.oneTimePassword" type="text" class="form-control mt-1 rounded" placeholder="Hasło jednorazowe" required>
 
-                <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
-            </form>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 export default {
   setup () {
+    const verified = ref(false);
+    const oneTimePasswordX = ref("");
+
     const username = reactive({
         name: '',
     })
@@ -46,10 +57,11 @@ export default {
         })
 
         if (!response.ok) {
-            console.log("error tba");
+            console.log("Error");
+        } else {
+            verified.value = !verified.value;
+            oneTimePasswordX.value = await response.json();
         }
-
-        alert(await response.json());  
     }
 
     const submit = async () => {
@@ -90,6 +102,8 @@ export default {
     }
 
     return {
+        verified,
+        oneTimePasswordX,
         data,
         username,
         submit,
