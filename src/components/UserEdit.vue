@@ -23,6 +23,9 @@
             <input type="checkbox" v-model="user.isBlocked"/>
         </div>
 
+        <label class="fw-bold mt-2">Czas wygaśnięcia sesji</label>
+        <input style="width: 400px;" type="number" v-model="user.sessionTimeMinutes"/>
+
         <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Zaktualizuj</button>
 
     </form>

@@ -31,6 +31,9 @@
             <input type="checkbox" v-model="user.isBlocked"/>
         </div>
 
+        <label class="fw-bold mt-2">Czas wygaśnięcia sesji</label>
+        <input style="width: 400px;" type="number" v-model="user.sessionTimeMinutes"/>
+
         <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Dodaj użytkownika</button>
 
     </form>
@@ -52,6 +55,7 @@ export default {
             passwordRestrictionsEnabled: true,
             isBlocked: false,
             badLoginBlockExpirationTime: null,
+            sessionTimeMinutes: 15,
         });
 
         const submit = async () => {
