@@ -16,8 +16,10 @@
                     <p>X = {{ oneTimePasswordX }}</p>
                     <input v-model="data.password" type="password" class="form-control mt-1 rounded" placeholder="Hasło" required>
                     <input v-model="data.oneTimePassword" type="text" class="form-control mt-1 rounded" placeholder="Hasło jednorazowe" required>
+                    <img src="../images/Captcha.png" class="mt-4" style="width:15vw; min-width: 207px;" />
+                    <input v-model="data.captchaAnswer" type="text" class="form-control mt-1 rounded" placeholder="Odpowiedź" required>
 
-                    <button class="btn btn-primary w-100 py-2" type="submit">Zaloguj</button>
+                    <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Zaloguj</button>
                 </form>
             </div>
         </div>
@@ -43,6 +45,7 @@ export default {
         password: '',
         roleId: '',
         oneTimePassword: '',
+        captchaAnswer: '',
         badLoginBlockExpirationTime: '',
     })
 
