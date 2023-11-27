@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { reactive, ref } from 'vue';
+import { useReCaptcha } from 'vue-recaptcha-v3';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -42,28 +43,59 @@ export default {
             userRestrictions: props.userRestrictions,
         });
 
+        let recaptchaInstance = useReCaptcha();
+
         function showPasswordChange(){
             clicked.value = !clicked.value;
         }
 
-        const submit = async () => {
-            const improperPassword = /(.).*\1/.test(data.newPassword);
+        const recaptcha = async () => {
+            await recaptchaInstance?.recaptchaLoaded();
+            const token = await recaptchaInstance?.executeRecaptcha('login');
+            console.log(token);
+            return token;
+        }
 
-            if(!improperPassword || (improperPassword && (data.userRestrictions == 0))){
-                const response = await fetch('http://localhost:7070/api/change-password', {
+        const submit = async () => {
+            let token = await recaptcha();
+
+            if (token && token.length > 0) {
+                const reCaptchaResponse = await fetch('http://localhost:7070/api/verify-recaptcha', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
+                    body: JSON.stringify({ token: token }),
+                });
 
-                if (!response.ok) {
-                    console.error('Nie udało się zmienić hasła.')
+                if (reCaptchaResponse) {
+                    const isResponseVerified = await reCaptchaResponse.json();
+                    
+                    if (isResponseVerified) {
+                        const improperPassword = /(.).*\1/.test(data.newPassword);
+
+                        if (!improperPassword || (improperPassword && data.userRestrictions === 0)) {
+                            const response = await fetch('http://localhost:7070/api/change-password', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data),
+                            });
+
+                            if (!response.ok) {
+                                console.error('Nie udało się zmienić hasła.');
+                            } else {
+                                alert('Hasło zmienione!');
+                                window.location.reload();
+                            }
+                        } else {
+                            alert('Hasło dla tego konta nie może mieć powtarzających się znaków.');
+                        }
+                    } else {
+                        console.error('ReCaptcha: nie uzyskano weryfikacji.');
+                    }
                 } else {
-                    alert("Hasło zmienione!");
-                    window.location.reload();
+                    console.error('Error parsing ReCaptcha response.');
                 }
             } else {
-                alert("Hasło dla tego konta nie może mieć powtarzających się znaków.");
+                console.error('Nie uzyskano tokenu ReCaptcha.');
             }
         }
 
@@ -72,6 +104,7 @@ export default {
             clicked,
             isLoggedIn: props.isLoggedIn,
             data,
+            recaptcha,
             showPasswordChange,
             submit,
         }
